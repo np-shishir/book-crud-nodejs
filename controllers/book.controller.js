@@ -1,3 +1,4 @@
+const { where } = require("sequelize")
 const { books } = require("../database/connection")
 
 
@@ -20,6 +21,42 @@ exports.addBook = async (req,res)=>{
     })
     res.json({
         message:"book added"
+        
+    })
+}
+
+exports.deleteBook = async (req, res)=>{
+    const id = req.params.id
+    await books.destroy({
+        where:{id:id}
+
+    })
+    res.json({
+        message:"book deleted"
+
+    })
+}
+
+
+exports.editBook = async (req,res)=>{
+    const id = req.params.id
+    const {bookName, bookPrice, bookAuthor, bookGenre} = req.body
+    await books.update({bookName, bookPrice, bookAuthor, bookGenre},{
+        where:{id:id}
+
+    })
+    res.json({
+        message:"book edited"
+    })
+}
+
+
+exports.singleFetchBook = async (req, res)=>{
+    id= req.params.id
+    const datas = await books.findByPk(id)
+    res.json({
+        message:"book fetched",
+        datas
         
     })
 }
